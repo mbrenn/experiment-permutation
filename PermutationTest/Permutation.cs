@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace PermutationTest
 {
@@ -65,16 +66,42 @@ namespace PermutationTest
                     }
                     first = false;
 
-                    resultArray[0] = element;
-                    foreach (var permutedSubArrays in GetAllPermutations(subArray))
+                    if (source.Length < 7)
                     {
-                        for (var m = 0; m < permutedSubArrays.Length; m++)
+                        resultArray[0] = element;
+                        foreach (var permutedSubArrays in GetAllPermutations(subArray))
                         {
-                            resultArray[m + 1] = permutedSubArrays[m];
-                        }
+                            for (var m = 0; m < permutedSubArrays.Length; m++)
+                            {
+                                resultArray[m + 1] = permutedSubArrays[m];
+                            }
 
-                        yield return resultArray;
+                            yield return resultArray;
+                        }
                     }
+                    else
+                    {
+                        // Parallel
+                        var list = new List<T[]>();
+                        Parallel.ForEach(GetAllPermutations(subArray), x =>
+                        {
+                            for (var m = 0; m < x.Length; m++)
+                            {
+                                resultArray[m + 1] = x[m];
+                            }
+
+                            lock (list)
+                            {
+                                list.Add(resultArray.ToArray());
+                            }
+                        });
+
+                        foreach (var item in list)
+                        {
+                            yield return item;
+                        }
+                    }
+
                 }
             }
         }

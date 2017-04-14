@@ -80,7 +80,7 @@ namespace PermutationTest
                             resultArray[m + 1] = permutedSubArrays[m];
                         }
 
-                        sub.Add(resultArray);
+                        sub.Add(resultArray.ToArray());
                     }
 
                     Monitor.Enter(result);
@@ -96,7 +96,7 @@ namespace PermutationTest
                             resultArray[m + 1] = permutedSubArrays[m];
                         }
 
-                        result.Add(resultArray);
+                        result.Add(resultArray.ToArray());
                     }
                 }
             });

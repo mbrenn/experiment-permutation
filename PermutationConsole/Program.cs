@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using PermutationTest;
 
 namespace PermutationConsole
@@ -9,17 +12,6 @@ namespace PermutationConsole
     {
         static void Main(string[] args)
         {
-            var list = new[] {1, 2, 3, 4, 5};
-            foreach (var permutation in ParallelPermutation.GetAllPermutations(list))
-            {
-                foreach (var val in permutation)
-                {
-                    Console.Write(val + ", ");
-                }
-
-                Console.WriteLine();
-            }
-
             for (var n = 1; n < 11; n++)
             {
                 var largeList = new int[n];
@@ -29,32 +21,46 @@ namespace PermutationConsole
                 }
 
                 var watch = Stopwatch.StartNew();
-                var count = ParallelPermutation.GetAllPermutations(largeList).LongCount();
-                Console.WriteLine(count);
-                watch.Stop();
-                Console.WriteLine($"Elapsed: {watch.Elapsed} for {n} elements: " +
-                                  $"{count * 1000 / (watch.ElapsedMilliseconds + 1)} elements/s");
+
+                /*var permutations = ParallelPermutation.GetAllPermutations(largeList);
+                Permutate(permutations, watch, n, "Parallel");*/
+
+                watch = Stopwatch.StartNew();
+                var enumPermutations = MemoryPermutation.GetAllPermutations(largeList);
+                Permutate(enumPermutations, watch, n, "Memory");
             }
+        }
 
+        private static void Permutate(IEnumerable<int[]> permutations, Stopwatch watch, int n, string type)
+        {
+            var list = permutations.ToList();
+            var count = list.LongCount();
+            watch.Stop();
+            Console.WriteLine($"{type}: {watch.Elapsed} for {n} ({count}) elements: " +
+                              $"{count * 1000 / (watch.ElapsedMilliseconds + 1)} elements/s");
 
-
-            for (var n = 1; n < 11; n++)
+            if (n <= 10)
             {
-                var largeList = new int[n];
-                for (var m = 0; m < n; m++)
+                Console.Write("Writing to file... ");
+                //WriteFile(list, type, n);
+                Console.WriteLine("Done");
+            }
+        }
+
+        private static void WriteFile(IEnumerable<int[]> permutations, string type, int n)
+        {
+            var builder = new StringBuilder();
+            foreach (var per in permutations)
+            {
+                foreach (var t in per)
                 {
-                    largeList[m] = m;
+                    builder.Append(t + " ");
                 }
 
-                var watch = Stopwatch.StartNew();
-                var count = MemoryPermutation.GetAllPermutations(largeList).LongCount();
-                Console.WriteLine(count);
-                watch.Stop();
-                Console.WriteLine($"Elapsed: {watch.Elapsed} for {n} elements: " +
-                                  $"{count * 1000 / (watch.ElapsedMilliseconds + 1)} elements/s");
+                builder.AppendLine();
             }
 
-            Console.ReadKey();
+            File.WriteAllText($"Permutations {n} - {type}.txt", builder.ToString());
         }
     }
 }

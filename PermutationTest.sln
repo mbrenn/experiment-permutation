@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PermutationTest", "PermutationTest\PermutationTest.csproj", "{A617D375-E59B-4DD9-92F4-68C0230F24C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PermutationConsole", "PermutationConsole\PermutationConsole.csproj", "{3B1AE676-D55D-4ECB-AEEA-8BC2B0BA6A65}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A617D375-E59B-4DD9-92F4-68C0230F24C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A617D375-E59B-4DD9-92F4-68C0230F24C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A617D375-E59B-4DD9-92F4-68C0230F24C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A617D375-E59B-4DD9-92F4-68C0230F24C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B1AE676-D55D-4ECB-AEEA-8BC2B0BA6A65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B1AE676-D55D-4ECB-AEEA-8BC2B0BA6A65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B1AE676-D55D-4ECB-AEEA-8BC2B0BA6A65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B1AE676-D55D-4ECB-AEEA-8BC2B0BA6A65}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

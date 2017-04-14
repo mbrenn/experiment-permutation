@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PermutationTest
 {
-    public static class Permutation
+    public static class ParallelPermutation
     {
         /// <summary>
         /// Gets all permutations of the given element as a 

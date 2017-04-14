@@ -23,7 +23,7 @@ namespace PermutationConsole
                 Console.WriteLine();
             }
 
-            for (var n = 1; n < 11; n++)
+            for (var n = 1; n < 12; n++)
             {
                 var largeList = new int[n];
                 for (var m = 0; m < n; m++)

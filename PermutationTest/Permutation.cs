@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PermutationTest
@@ -43,13 +44,14 @@ namespace PermutationTest
             }
 
             var result = new List<T[]>();
-            var resultArray = new T[source.Length];
-            var subArray = new T[source.Length - 1];
-            var first = true;
             // for (var n = 0; n < source.Length; n++)
+            bool[] doLock = {false};
 
             var func = new Action<int>(n =>
             {
+                var resultArray = new T[source.Length];
+                var subArray = new T[source.Length - 1];
+
                 // Creates a subArray for the given array. 
                 var element = source[n];
                 var i = 0;
@@ -57,35 +59,51 @@ namespace PermutationTest
                 {
                     if (m == n)
                     {
-                        if (first)
-                        {
-                            continue;
-                        }
-                        break;
+                        continue;
                     }
 
                     subArray[i] = source[m];
                     i++;
                 }
-                first = false;
 
                 resultArray[0] = element;
-                foreach (var permutedSubArrays in GetAllPermutations(subArray))
+                var list = GetAllPermutations(subArray);
+                
+                if (doLock[0])
                 {
-                    for (var m = 0; m < permutedSubArrays.Length; m++)
+                    var sub = new List<T[]>();
+
+                    foreach (var permutedSubArrays in list)
                     {
-                        resultArray[m + 1] = permutedSubArrays[m];
+                        for (var m = 0; m < permutedSubArrays.Length; m++)
+                        {
+                            resultArray[m + 1] = permutedSubArrays[m];
+                        }
+
+                        sub.Add(resultArray);
                     }
 
-                    lock (result)
+                    Monitor.Enter(result);
+                    result.AddRange(sub);
+                    Monitor.Exit(result);
+                }
+                else
+                {
+                    foreach (var permutedSubArrays in list)
                     {
-                        result.Add(resultArray.ToArray());
+                        for (var m = 0; m < permutedSubArrays.Length; m++)
+                        {
+                            resultArray[m + 1] = permutedSubArrays[m];
+                        }
+
+                        result.Add(resultArray);
                     }
                 }
             });
 
             if (source.Length > 7)
             {
+                doLock[0] = true;
                 Parallel.For(0, source.Length, func);
             }
             else

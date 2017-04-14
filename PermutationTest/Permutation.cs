@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace PermutationTest
@@ -44,6 +42,7 @@ namespace PermutationTest
             {
                 var resultArray = new T[source.Length];
                 var subArray = new T[source.Length - 1];
+                var first = true;
 
                 for (var n = 0; n < source.Length; n++)
                 {
@@ -54,25 +53,28 @@ namespace PermutationTest
                     {
                         if (m == n)
                         {
-                            continue;
+                            if (first)
+                            {
+                                continue;
+                            }
+                            break;
                         }
 
                         subArray[i] = source[m];
                         i++;
                     }
+                    first = false;
 
                     resultArray[0] = element;
-                    //foreach (var permutedSubArrays in GetAllPermutations(subArray))
-                    Parallel.ForEach(GetAllPermutations<T>(subArray),
-                        permutedSubArrays =>
+                    foreach (var permutedSubArrays in GetAllPermutations(subArray))
+                    {
+                        for (var m = 0; m < permutedSubArrays.Length; m++)
                         {
-                            for (var m = 0; m < permutedSubArrays.Length; m++)
-                            {
-                                resultArray[m + 1] = permutedSubArrays[m];
-                            }
+                            resultArray[m + 1] = permutedSubArrays[m];
+                        }
 
-                            yield return resultArray;
-                        });
+                        yield return resultArray;
+                    }
                 }
             }
         }

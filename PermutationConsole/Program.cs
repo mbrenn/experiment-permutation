@@ -12,7 +12,6 @@ namespace PermutationConsole
     {
         static void Main(string[] args)
         {
-            /*
             var list = new[] {1, 2, 3, 4, 5};
             foreach (var permutation in Permutation.GetAllPermutations(list))
             {
@@ -22,7 +21,7 @@ namespace PermutationConsole
                 }
 
                 Console.WriteLine();
-            }*/
+            }
 
             for (var n = 1; n < 11; n++)
             {

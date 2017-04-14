@@ -12,7 +12,7 @@ namespace PermutationConsole
     {
         static void Main(string[] args)
         {
-            for (var n = 1; n < 11; n++)
+            for (var n = 1; n < 12; n++)
             {
                 var largeList = new int[n];
                 for (var m = 0; m < n; m++)
@@ -22,45 +22,51 @@ namespace PermutationConsole
 
                 var watch = Stopwatch.StartNew();
 
-                /*var permutations = ParallelPermutation.GetAllPermutations(largeList);
-                Permutate(permutations, watch, n, "Parallel");*/
+                if (n < 11)
+                {
+                    var permutations = ParallelPermutation.GetAllPermutations(largeList);
+                    Permutate(permutations, watch, n, "P");
+                }
 
                 watch = Stopwatch.StartNew();
-                var enumPermutations = MemoryPermutation.GetAllPermutations(largeList);
-                Permutate(enumPermutations, watch, n, "Memory");
+                var enumPermutations = Permutation.GetAllPermutations(largeList);
+                Permutate(enumPermutations, watch, n, "M");
             }
         }
 
         private static void Permutate(IEnumerable<int[]> permutations, Stopwatch watch, int n, string type)
         {
-            var list = permutations.ToList();
-            var count = list.LongCount();
+            permutations = permutations.Select(x => x.ToArray()).ToArray();
+            var count = permutations.Select(x=>x.ToArray()).LongCount();
             watch.Stop();
-            Console.WriteLine($"{type}: {watch.Elapsed} for {n} ({count}) elements: " +
+            Console.WriteLine($"{type} - {n}: {watch.Elapsed} for {count} elements: " +
                               $"{count * 1000 / (watch.ElapsedMilliseconds + 1)} elements/s");
 
             if (n <= 10)
             {
-                Console.Write("Writing to file... ");
-                //WriteFile(list, type, n);
-                Console.WriteLine("Done");
+                WriteFile(permutations, type, n);
             }
         }
 
         private static void WriteFile(IEnumerable<int[]> permutations, string type, int n)
         {
-            var builder = new StringBuilder();
-            foreach (var per in permutations)
+            using (var file = File.OpenWrite($"Permutations {n} - {type}.txt"))
             {
-                foreach (var t in per)
+                using (var stream = new StreamWriter(file))
                 {
-                    builder.Append(t + " ");
+                    var builder = new StringBuilder();
+                    foreach (var per in permutations)
+                    {
+                        builder.Clear();
+                        foreach (var t in per)
+                        {
+                            builder.Append(t + " ");
+                        }
+
+                        stream.WriteLine(builder.ToString());
+                    }
                 }
-
-                builder.AppendLine();
             }
-
-            File.WriteAllText($"Permutations {n} - {type}.txt", builder.ToString());
         }
     }
 }
